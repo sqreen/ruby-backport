@@ -39,3 +39,7 @@ Metrics/AbcSize:
 Metrics/MethodLength:
     Exclude:
         - test/**/test_*.rb
+
+Metrics/ClassLength:
+    Exclude:
+        - test/**/test_*.rb
