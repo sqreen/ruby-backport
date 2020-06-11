@@ -1,0 +1,41 @@
+inherit_from: .rubocop_todo.yml
+
+AllCops:
+    TargetRubyVersion: 1.9.3
+
+Naming/FileName:
+    Exclude:
+        - lib/sqreen-backport.rb
+
+Style/Documentation:
+    Enabled: false
+
+Style/ClassAndModuleChildren:
+    EnforcedStyle: compact
+
+Style/TrailingCommaInLiteral:
+    EnforcedStyleForMultiline: comma
+
+Style/TrailingCommaInArguments:
+    EnforcedStyleForMultiline: comma
+
+Style/BracesAroundHashParameters:
+    Enabled: false
+
+Style/HashSyntax:
+  EnforcedStyle: hash_rockets
+
+Style/Alias:
+    EnforcedStyle: prefer_alias_method
+
+# no casecmp? in ruby 1.9
+Performance/Casecmp:
+    Enabled: false
+
+Metrics/AbcSize:
+    Exclude:
+        - test/**/test_*.rb
+
+Metrics/MethodLength:
+    Exclude:
+        - test/**/test_*.rb
