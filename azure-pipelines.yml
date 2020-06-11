@@ -42,7 +42,7 @@ stages:
         steps:
           - script: uname -a; gcc --version; ruby --version
           - script: bundle install
-          - script: bundle exec rake test
+          - script: bundle exec ruby -Ilib:test `find test/sqreen -name 'test_*.rb'`
 
       - job: linux_musl
         strategy:
