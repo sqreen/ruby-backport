@@ -42,7 +42,7 @@ stages:
         steps:
           - script: uname -a; gcc --version; ruby --version
           - script: bundle install
-          - script: bundle exec ruby -Ilib:test `find test/sqreen -name 'test_*.rb'`
+          - script: bundle exec rake test
 
       - job: linux_musl
         strategy:
@@ -75,7 +75,7 @@ stages:
           - script: sudo apk add --no-cache build-base || sudo apk add --no-cache binutils libmagic file isl libgomp libatomic mpfr3 mpc1 gcc musl-dev libc-dev g++ make fortify-headers
           - script: uname -a; gcc --version; ruby --version
           - script: bundle install
-          - script: bundle exec ruby -Ilib:test `find test/sqreen -name 'test_*.rb'`
+          - script: bundle exec rake test
 
       - job: linux_glibc
         strategy:
@@ -113,7 +113,7 @@ stages:
         steps:
           - script: uname -a; gcc --version; ruby --version
           - script: env BUNDLE_APP_CONFIG=.bundle/config bundle install --no-cache --path vendor/bundle
-          - script: env BUNDLE_APP_CONFIG=.bundle/config bundle exec ruby -Ilib:test `find test/sqreen -name 'test_*.rb'`
+          - script: env BUNDLE_APP_CONFIG=.bundle/config bundle exec rake test
 
       - job: linux_java
         strategy:
@@ -127,4 +127,4 @@ stages:
         steps:
           - script: uname -a; gcc --version; ruby --version
           - script: bundle install
-          - script: bundle exec ruby -Ilib:test `find test/sqreen -name 'test_*.rb'`
+          - script: bundle exec rake test
