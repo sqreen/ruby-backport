@@ -1,3 +1,6 @@
+# Copyright (c) 2015 Sqreen. All Rights Reserved.
+# Please refer to our terms for more information: https://www.sqreen.com/terms.html
+
 source 'https://rubygems.org'
 
 gem 'rake', '~> 11.0' if RUBY_VERSION.start_with?('1.9.3')
