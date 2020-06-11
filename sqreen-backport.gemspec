@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
-load 'lib/sqreen/backport/version.rb'
+lib = File.expand_path('../lib', __FILE__)
+$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+
+require 'sqreen/backport/version'
 
 Gem::Specification.new do |s|
   s.name        = 'sqreen-backport'
