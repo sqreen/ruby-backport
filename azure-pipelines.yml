@@ -1,0 +1,130 @@
+stages:
+  - stage: Lint
+    jobs:
+      - job: rubocop
+        strategy:
+          matrix:
+            ruby-2.6:
+              imageName: 'ubuntu-latest'
+              containerImage: 'ruby:2.6'
+        container: $[ variables['containerImage'] ]
+        pool:
+          vmImage: $(imageName)
+        steps:
+          - script: uname -a; gcc --version; ruby --version
+          - script: bundle install
+          - script: bundle exec rubocop -D
+    # - job: sorbet
+    #   strategy:
+    #     matrix:
+    #       ruby-2.6:
+    #         imageName: 'ubuntu-latest'
+    #         containerImage: 'ruby:2.6'
+    #   container: $[ variables['containerImage'] ]
+    #   pool:
+    #     vmImage: $(imageName)
+    #   steps:
+    #     - script: uname -a; gcc --version; ruby --version
+    #     - script: bundle install
+    #     - script: bundle exec srb tc
+
+  - stage: Test
+    jobs:
+      - job: darwin
+        strategy:
+          matrix:
+            '18':
+              imageName: 'macos-10.14'
+            '19':
+              imageName: 'macos-10.15'
+        pool:
+          vmImage: $(imageName)
+        steps:
+          - script: uname -a; gcc --version; ruby --version
+          - script: bundle install
+          - script: bundle exec rake test
+
+      - job: linux_musl
+        strategy:
+          matrix:
+            ruby-2.1:
+              imageName: 'ubuntu-latest'
+              containerImage: 'lloeki/ruby:2.1-alpine-azure-pipelines'
+            ruby-2.2:
+              imageName: 'ubuntu-latest'
+              containerImage: 'lloeki/ruby:2.2-alpine-azure-pipelines'
+            ruby-2.3:
+              imageName: 'ubuntu-latest'
+              containerImage: 'lloeki/ruby:2.3-alpine-azure-pipelines'
+            ruby-2.4:
+              imageName: 'ubuntu-latest'
+              containerImage: 'lloeki/ruby:2.4-alpine-azure-pipelines'
+            ruby-2.5:
+              imageName: 'ubuntu-latest'
+              containerImage: 'lloeki/ruby:2.5-alpine-azure-pipelines'
+            ruby-2.6:
+              imageName: 'ubuntu-latest'
+              containerImage: 'lloeki/ruby:2.6-alpine-azure-pipelines'
+            ruby-2.7:
+              imageName: 'ubuntu-latest'
+              containerImage: 'lloeki/ruby:2.7-alpine-azure-pipelines'
+        container: $[ variables['containerImage'] ]
+        pool:
+          vmImage: $(imageName)
+        steps:
+          - script: sudo apk add --no-cache build-base || sudo apk add --no-cache binutils libmagic file isl libgomp libatomic mpfr3 mpc1 gcc musl-dev libc-dev g++ make fortify-headers
+          - script: uname -a; gcc --version; ruby --version
+          - script: bundle install
+          - script: bundle exec ruby -Ilib:test `find test/sqreen -name 'test_*.rb'`
+
+      - job: linux_glibc
+        strategy:
+          matrix:
+            ruby-1.9.3:
+              imageName: 'ubuntu-latest'
+              containerImage: 'ruby:1.9.3'
+            ruby-2.0:
+              imageName: 'ubuntu-latest'
+              containerImage: 'ruby:2.0'
+            ruby-2.1:
+              imageName: 'ubuntu-latest'
+              containerImage: 'ruby:2.1'
+            ruby-2.2:
+              imageName: 'ubuntu-latest'
+              containerImage: 'ruby:2.2'
+            ruby-2.3:
+              imageName: 'ubuntu-latest'
+              containerImage: 'ruby:2.3'
+            ruby-2.4:
+              imageName: 'ubuntu-latest'
+              containerImage: 'ruby:2.4'
+            ruby-2.5:
+              imageName: 'ubuntu-latest'
+              containerImage: 'ruby:2.5'
+            ruby-2.6:
+              imageName: 'ubuntu-latest'
+              containerImage: 'ruby:2.6'
+            ruby-2.7:
+              imageName: 'ubuntu-latest'
+              containerImage: 'ruby:2.7'
+        container: $[ variables['containerImage'] ]
+        pool:
+          vmImage: $(imageName)
+        steps:
+          - script: uname -a; gcc --version; ruby --version
+          - script: env BUNDLE_APP_CONFIG=.bundle/config bundle install --no-cache --path vendor/bundle
+          - script: env BUNDLE_APP_CONFIG=.bundle/config bundle exec ruby -Ilib:test `find test/sqreen -name 'test_*.rb'`
+
+      - job: linux_java
+        strategy:
+          matrix:
+            jruby-9.2:
+              imageName: 'ubuntu-latest'
+              containerImage: 'jruby:9.2-jdk'
+        container: $[ variables['containerImage'] ]
+        pool:
+          vmImage: $(imageName)
+        steps:
+          - script: uname -a; gcc --version; ruby --version
+          - script: bundle install
+          - script: bundle exec ruby -Ilib:test `find test/sqreen -name 'test_*.rb'`
