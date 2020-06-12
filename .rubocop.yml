@@ -29,7 +29,7 @@ Style/BracesAroundHashParameters:
     Enabled: false
 
 Style/HashSyntax:
-  EnforcedStyle: hash_rockets
+    EnforcedStyle: hash_rockets
 
 Style/MultilineIfModifier:
     Enabled: false
