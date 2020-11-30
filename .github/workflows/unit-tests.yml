@@ -1,0 +1,79 @@
+name: Unit Tests
+on:
+    - push
+
+jobs:
+    linux:
+        strategy:
+            fail-fast: false
+            matrix:
+                os:
+                    - ubuntu-20.04
+                container:
+                    - 'ruby:1.9.3'
+                    - 'ruby:2.0'
+                    - 'ruby:2.1'
+                    - 'ruby:2.2'
+                    - 'ruby:2.3'
+                    - 'ruby:2.4'
+                    - 'ruby:2.5'
+                    - 'ruby:2.6'
+                    - 'ruby:2.7'
+                    - 'ruby:2.1-alpine'
+                    - 'ruby:2.2-alpine'
+                    - 'ruby:2.3-alpine'
+                    - 'ruby:2.4-alpine'
+                    - 'ruby:2.5-alpine'
+                    - 'ruby:2.6-alpine'
+                    - 'ruby:2.7-alpine'
+                    - 'jruby:9.2-jdk'
+                experimental:
+                    - false
+                include:
+                    - os: ubuntu-20.04
+                      container: 'ruby:3.0.0-preview1'
+                      experimental: true
+                    - os: ubuntu-20.04
+                      container: 'ruby:3.0.0-preview1-alpine'
+                      experimental: true
+        continue-on-error: ${{ matrix.experimental }}
+        name: x86_64-linux ${{ matrix.container }}
+        runs-on: ${{ matrix.os }}
+        container: ${{ matrix.container }}
+        steps:
+            - name: Install Alpine build tools
+              if: ${{ endsWith(matrix.container, '-alpine') }}
+              run: apk add --no-cache build-base || apk add --no-cache binutils libmagic file isl libgomp libatomic mpfr3 mpc1 gcc musl-dev libc-dev g++ make fortify-headers
+            - name: Show environment
+              if: ${{ ! startsWith(matrix.container, 'jruby') }}
+              run: uname -a; gcc --version; ruby --version
+            - name: Checkout
+              uses: actions/checkout@v2
+            - name: Bundle
+              run: env BUNDLE_APP_CONFIG=.bundle/config bundle install --no-cache --path vendor/bundle
+            - name: Test
+              run: env BUNDLE_APP_CONFIG=.bundle/config bundle exec rake test
+    macos:
+        strategy:
+            fail-fast: false
+            matrix:
+                os:
+                    - macos-10.15
+                    - macos-11.0
+                experimental:
+                    - false
+               #include:
+               #    - os: macos-11.0
+               #      experimental: true
+        continue-on-error: ${{ matrix.experimental }}
+        name: x86_64-darwin ${{ matrix.os }}
+        runs-on: ${{ matrix.os }}
+        steps:
+            - name: Show environment
+              run: uname -a; gcc --version; ruby --version
+            - name: Checkout
+              uses: actions/checkout@v2
+            - name: Bundle
+              run: env BUNDLE_APP_CONFIG=.bundle/config bundle install --no-cache --path vendor/bundle
+            - name: Test
+              run: env BUNDLE_APP_CONFIG=.bundle/config bundle exec rake test

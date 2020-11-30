@@ -17,11 +17,11 @@ module Sqreen::Backport::UncaughtThrowError
   def throw(tag, value = nil)
     super
   rescue ArgumentError => e
-    if e.message =~ /^uncaught throw (?:.*)$/
-      raise ::Object::UncaughtThrowError.new(tag, value, e.message).tap { |x| x.set_backtrace(e.backtrace) }
-    else
-      raise
-    end
+    raise unless e.message =~ /^uncaught throw (?:.*)$/
+
+    x = ::Object::UncaughtThrowError.new(tag, value, e.message)
+    x.set_backtrace(e.backtrace)
+    raise x
   end
 end
 

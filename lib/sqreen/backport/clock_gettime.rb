@@ -53,10 +53,7 @@ module Sqreen::Backport::ClockGettime
       end
 
       t = Sqreen::Backport::ClockGettime::Timespec.new
-      ret = Sqreen::Backport::ClockGettime::LibC.clock_gettime(
-        clock_id,
-        t.pointer,
-      )
+      ret = Sqreen::Backport::ClockGettime::LibC.clock_gettime(clock_id, t.pointer)
 
       raise SystemCallError, "Errno #{FFI.errno}" if ret == -1
 

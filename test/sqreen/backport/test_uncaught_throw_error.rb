@@ -1,4 +1,4 @@
-# typed: false
+# typed: ignore
 
 # Copyright (c) 2015 Sqreen. All Rights Reserved.
 # Please refer to our terms for more information: https://www.sqreen.com/terms.html
@@ -20,35 +20,35 @@ class Sqreen::Backport::UncaughtThrowErrorTest < Minitest::Test
 
   def test_error_thrown_has_message
     throw(:foo)
-  rescue => e
+  rescue StandardError => e
     assert_equal(UncaughtThrowError, e.class)
     assert_equal('uncaught throw :foo', e.message)
   end
 
   def test_error_thrown_has_symbol_tag
     throw(:foo)
-  rescue => e
+  rescue StandardError => e
     assert_equal(UncaughtThrowError, e.class)
     assert_equal(:foo, e.tag)
   end
 
   def test_error_thrown_has_string_tag
     throw('foo')
-  rescue => e
+  rescue StandardError => e
     assert_equal(UncaughtThrowError, e.class)
     assert_equal('foo', e.tag)
   end
 
   def test_error_thrown_has_object_tag
     throw(o = Object.new)
-  rescue => e
+  rescue StandardError => e
     assert_equal(UncaughtThrowError, e.class)
     assert_equal(o, e.tag)
   end
 
   def test_error_thrown_has_value
     throw(:foo, 'bar')
-  rescue => e
+  rescue StandardError => e
     assert_equal(UncaughtThrowError, e.class)
     assert_equal('bar', e.value)
   end
