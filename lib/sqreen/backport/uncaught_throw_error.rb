@@ -6,6 +6,8 @@
 require 'sqreen/backport'
 
 module Sqreen::Backport::UncaughtThrowError
+  HAS_UNCAUGHT_THROW_ERROR = defined?(::Object::UncaughtThrowError)
+
   class << self
     def supported?
       defined?(::Object::UncaughtThrowError)

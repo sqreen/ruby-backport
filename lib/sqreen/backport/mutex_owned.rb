@@ -6,6 +6,8 @@
 require 'sqreen/backport'
 
 module Sqreen::Backport::MutexOwned
+  HAS_MUTEX_OWNED = Mutex.new.respond_to?(:owned?)
+
   class << self
     def supported?
       Mutex.new.respond_to?(:owned?)
