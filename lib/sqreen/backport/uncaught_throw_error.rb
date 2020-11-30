@@ -15,7 +15,7 @@ module Sqreen::Backport::UncaughtThrowError
   end
 
   def throw(tag, value = nil)
-    super
+    Module.respond_to?(:prepend, true) ? super : throw_without_uncaught_throw_error(tag, value)
   rescue ArgumentError => e
     raise unless e.message =~ /^uncaught throw (?:.*)$/
 
@@ -39,6 +39,17 @@ unless Sqreen::Backport::UncaughtThrowError.supported?
     end
   end
 
-  ::Kernel.singleton_class.instance_eval { prepend Sqreen::Backport::UncaughtThrowError }
-  ::Object.instance_eval { prepend Sqreen::Backport::UncaughtThrowError }
+  if Module.respond_to?(:prepend, true)
+    ::Kernel.singleton_class.instance_eval { prepend Sqreen::Backport::UncaughtThrowError }
+    ::Object.instance_eval { prepend Sqreen::Backport::UncaughtThrowError }
+  else
+    ::Kernel.singleton_class.instance_eval do
+      alias_method :throw_without_uncaught_throw_error, :throw
+      include Sqreen::Backport::UncaughtThrowError
+    end
+    ::Object.instance_eval do
+      alias_method :throw_without_uncaught_throw_error, :throw
+      include Sqreen::Backport::UncaughtThrowError
+    end
+  end
 end
