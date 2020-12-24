@@ -31,13 +31,13 @@ jobs:
                     - false
                 include:
                     - os: ubuntu-20.04
-                      container: 'ruby:3.0.0-preview1'
+                      container: 'ruby:3.0.0-preview2'
                       experimental: true
                     - os: ubuntu-20.04
-                      container: 'ruby:3.0.0-preview1-alpine'
+                      container: 'ruby:3.0.0-preview2-alpine'
                       experimental: true
         continue-on-error: ${{ matrix.experimental }}
-        name: Unit test on x86_64-linux ${{ matrix.container }}
+        name: Unit x86_64-linux ${{ matrix.container }}
         runs-on: ${{ matrix.os }}
         container: ${{ matrix.container }}
         steps:
@@ -66,7 +66,7 @@ jobs:
                #    - os: macos-11.0
                #      experimental: true
         continue-on-error: ${{ matrix.experimental }}
-        name: Unit test on x86_64-darwin ${{ matrix.os }}
+        name: Unit x86_64-darwin ${{ matrix.os }}
         runs-on: ${{ matrix.os }}
         steps:
             - name: Show environment
