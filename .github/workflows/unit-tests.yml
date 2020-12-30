@@ -19,6 +19,7 @@ jobs:
                     - 'ruby:2.5'
                     - 'ruby:2.6'
                     - 'ruby:2.7'
+                    - 'ruby:3.0'
                     - 'ruby:2.1-alpine'
                     - 'ruby:2.2-alpine'
                     - 'ruby:2.3-alpine'
@@ -26,16 +27,17 @@ jobs:
                     - 'ruby:2.5-alpine'
                     - 'ruby:2.6-alpine'
                     - 'ruby:2.7-alpine'
+                    - 'ruby:3.0-alpine'
                     - 'jruby:9.2-jdk'
                 experimental:
                     - false
-                include:
-                    - os: ubuntu-20.04
-                      container: 'ruby:3.0.0-preview2'
-                      experimental: true
-                    - os: ubuntu-20.04
-                      container: 'ruby:3.0.0-preview2-alpine'
-                      experimental: true
+               #include:
+               #    - os: ubuntu-20.04
+               #      container: 'ruby:3.0.0-preview2'
+               #      experimental: true
+               #    - os: ubuntu-20.04
+               #      container: 'ruby:3.0.0-preview2-alpine'
+               #      experimental: true
         continue-on-error: ${{ matrix.experimental }}
         name: Unit x86_64-linux ${{ matrix.container }}
         runs-on: ${{ matrix.os }}
